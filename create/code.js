@@ -1,6 +1,11 @@
 const song = new Song();
+const DEBUG = true;
 
 $(document).ready(() => {
+  UKU.injectVideoJs().then(() => {
+    videojs($('#ukuVideo')[0]);
+  });
+
   const createSongContainer = $('.create-song-container');
   const setupSongContainer = $('.setup-song-container');
 
@@ -14,4 +19,9 @@ $(document).ready(() => {
     createSongContainer.hide();
     setupSongContainer.show();
   });
+
+  if (DEBUG) {
+    createSongContainer.hide();
+    setupSongContainer.show();
+  }
 });

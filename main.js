@@ -6,6 +6,8 @@ class Song {
   }
 }
 
+const UKU = {};
+
 (() => {
 
 const boot = () => {
@@ -76,11 +78,73 @@ const injectPageCode = () => {
   document.head.appendChild(script);
 };
 
+const injectVideoJs = () => {
+  window.HELP_IMPROVE_VIDEOJS  = false;
+
+  return new Promise((resolve) => {
+    let count = 0;
+
+    const resolveStep = () => {
+      if (++count === 4) {
+        resolve();
+      }
+    };
+
+    injectVideoJsCode(resolveStep);
+    injectVideoJsStyles(resolveStep);
+    injectVideoJsTheme(resolveStep);
+    injectVideoJsYoutubePlugin(resolveStep);
+  });
+};
+
+UKU.injectVideoJs = injectVideoJs;
+
+const injectVideoJsCode = (cb) => {
+  const script = document.createElement('script');
+  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/video.js/7.17.0/video.min.js';
+  script.integrity = 'sha512-264/2HLR9EPm+2Q6uFPoqzW617BQzd2/UwcXTKIMu3xcpoeAK6NnePpRkVRMsei4mSx+9PA651lTazOft9mGRw==';
+  script.crossOrigin = 'anonymous';
+  script.referrerPolicy = 'no-referrer';
+  script.async = false;
+  script.onload = cb;
+  document.head.appendChild(script);
+};
+
+const injectVideoJsStyles = (cb) => {
+  const link = document.createElement('link');
+  link.href = 'https://cdnjs.cloudflare.com/ajax/libs/video.js/7.17.0/video-js.min.css';
+  link.rel = 'stylesheet';
+  link.integrity = 'sha512-d4c0djrxPfHtfWvKxxUpyL7jQxHfXf8ijfTcmbK9NZUYpl/Bclwj5SlWDpjxJfq1ah1JAqyFj8T00DmxiX+LJw==';
+  link.crossOrigin = 'anonymous';
+  link.referrerPolicy = 'no-referrer';
+  link.async = false;
+  link.onload = cb;
+  document.head.appendChild(link);
+};
+
+const injectVideoJsTheme = (cb) => {
+  const link = document.createElement('link');
+  link.href = 'https://unpkg.com/@videojs/themes@1/dist/city/index.css';
+  link.rel = 'stylesheet';
+  link.async = false;
+  link.onload = cb;
+  document.head.appendChild(link);
+};
+
+const injectVideoJsYoutubePlugin = (cb) => {
+  const script = document.createElement('script');
+  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/videojs-youtube/2.6.1/Youtube.min.js';
+  script.integrity = 'sha512-mF+XuiEvJq707N/B9Fm/fI2wgMcWuFLsoztIp0UzEKgHCZgczbYpO2+Vq2TEi0LmE4crVj2r8AYru7X5QjVotw==';
+  script.crossOrigin = 'anonymous';
+  script.referrerPolicy = 'no-referrer';
+  script.async = false;
+  script.onload = cb;
+  document.head.appendChild(script);
+}
+
 boot();
 
 })();
-
-const UKU = {};
 
 UKU.inputVal = (name) => {
   return $(`input[name="${name}"]`).val()
