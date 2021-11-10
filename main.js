@@ -1,3 +1,11 @@
+class Song {
+  constructor() {
+    this.artist = '';
+    this.title = '';
+    this.link = '';
+  }
+}
+
 (() => {
 
 const boot = () => {

@@ -1,0 +1,33 @@
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+.create-song-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.create-song-container {
+  background-color: #e7e9eb;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 400px;
+  max-width: 80%;
+  display: flex;
+  flex-direction: column;
+}
+
+.setup-song-container {
+  background-color: #e7e9eb;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 400px;
+  max-width: 80%;
+  display: flex;
+  flex-direction: column;
+}
