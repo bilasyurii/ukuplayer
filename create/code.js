@@ -3,7 +3,13 @@ const DEBUG = true;
 
 $(document).ready(() => {
   UKU.injectVideoJs().then(() => {
-    videojs($('#ukuVideo')[0]);
+    const player = videojs($('#ukuVideo')[0]);
+    player.seekButtons({
+      forward: 1,
+      back: 1,
+      forwardIndex: 3,
+      backIndex: 3,
+    });
   });
 
   const createSongContainer = $('.create-song-container');

@@ -85,15 +85,17 @@ const injectVideoJs = () => {
     let count = 0;
 
     const resolveStep = () => {
-      if (++count === 4) {
+      if (++count === 6) {
         resolve();
       }
     };
 
     injectVideoJsCode(resolveStep);
-    injectVideoJsStyles(resolveStep);
     injectVideoJsTheme(resolveStep);
+    injectVideoJsStyles(resolveStep);
     injectVideoJsYoutubePlugin(resolveStep);
+    injectVideoJsSeekButtonsPluginCode(resolveStep);
+    injectVideoJsSeekButtonsPluginStyles(resolveStep);
   });
 };
 
@@ -119,7 +121,7 @@ const injectVideoJsStyles = (cb) => {
   link.referrerPolicy = 'no-referrer';
   link.async = false;
   link.onload = cb;
-  document.head.appendChild(link);
+  document.head.prepend(link);
 };
 
 const injectVideoJsTheme = (cb) => {
@@ -128,7 +130,7 @@ const injectVideoJsTheme = (cb) => {
   link.rel = 'stylesheet';
   link.async = false;
   link.onload = cb;
-  document.head.appendChild(link);
+  document.head.prepend(link);
 };
 
 const injectVideoJsYoutubePlugin = (cb) => {
@@ -140,7 +142,24 @@ const injectVideoJsYoutubePlugin = (cb) => {
   script.async = false;
   script.onload = cb;
   document.head.appendChild(script);
-}
+};
+
+const injectVideoJsSeekButtonsPluginCode = (cb) => {
+  const script = document.createElement('script');
+  script.src = 'https://cdn.jsdelivr.net/npm/videojs-seek-buttons/dist/videojs-seek-buttons.min.js';
+  script.async = false;
+  script.onload = cb;
+  document.head.appendChild(script);
+};
+
+const injectVideoJsSeekButtonsPluginStyles = (cb) => {
+  const link = document.createElement('link');
+  link.href = 'https://cdn.jsdelivr.net/npm/videojs-seek-buttons/dist/videojs-seek-buttons.css';
+  link.rel = 'stylesheet';
+  link.async = false;
+  link.onload = cb;
+  document.head.prepend(link);
+};
 
 boot();
 
