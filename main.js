@@ -12,6 +12,10 @@ class Marker {
     this.data = null;
   }
 
+  getTime() {
+    return this.data.time;
+  }
+
   getText() {
     return this.data.text;
   }

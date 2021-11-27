@@ -56,6 +56,10 @@ $(document).ready(() => {
     setupSongContainer.show();
   });
 
+  const goToMarker = (marker) => {
+    player.currentTime(marker.getTime());
+  };
+
   const hideMarkerControls = () => {
     $('#createMarkerBtn').hide();
     $('#saveMarkerBtn').hide();
@@ -89,6 +93,7 @@ $(document).ready(() => {
     marker.button.addClass('active');
     selectedMarker = marker;
     setupMarkerEditing();
+    goToMarker(selectedMarker);
   };
 
   const onMarkerButtonClicked = (button) => {
