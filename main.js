@@ -11,6 +11,15 @@ class Marker {
     this.button = null;
     this.data = null;
   }
+
+  getText() {
+    return this.data.text;
+  }
+
+  setText(text) {
+    this.data.text = text;
+    this.button.html(text);
+  }
 }
 
 const UKU = {};
@@ -204,6 +213,12 @@ boot();
 
 })();
 
-UKU.inputVal = (name) => {
-  return $(`input[name="${name}"]`).val()
+UKU.inputVal = (name, value) => {
+  const input = $(`input[name="${name}"]`);
+
+  if (value === undefined) {
+    return input.val();
+  }
+
+  return input.val(value);
 };

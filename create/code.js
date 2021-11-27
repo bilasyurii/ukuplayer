@@ -56,6 +56,25 @@ $(document).ready(() => {
     setupSongContainer.show();
   });
 
+  const hideMarkerControls = () => {
+    $('#createMarkerBtn').hide();
+    $('#saveMarkerBtn').hide();
+    $('#cancelMarkerBtn').hide();
+  }
+
+  const setupMarkerCreation = () => {
+    hideMarkerControls();
+    $('#createMarkerBtn').show();
+    UKU.inputVal('marker_name', '');
+  };
+
+  const setupMarkerEditing = () => {
+    hideMarkerControls();
+    $('#saveMarkerBtn').show();
+    $('#cancelMarkerBtn').show();
+    UKU.inputVal('marker_name', selectedMarker.getText());
+  };
+
   const deselectMarker = () => {
     if (!selectedMarker) {
       return;
@@ -63,11 +82,13 @@ $(document).ready(() => {
 
     selectedMarker.button.removeClass('active');
     selectedMarker = null;
+    setupMarkerCreation();
   };
 
   const selectMarker = (marker) => {
     marker.button.addClass('active');
     selectedMarker = marker;
+    setupMarkerEditing();
   };
 
   const onMarkerButtonClicked = (button) => {
@@ -111,6 +132,16 @@ $(document).ready(() => {
 
     createMarker(currentTime, markerName);
   });
+
+  $('#saveMarkerBtn').click(() => {
+    selectedMarker.setText(UKU.inputVal('marker_name'));
+  });
+
+  $('#cancelMarkerBtn').click(() => {
+    deselectMarker();
+  });
+
+  setupMarkerCreation();
 
   if (DEBUG) {
     createSongContainer.hide();
