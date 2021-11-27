@@ -10,7 +10,10 @@ let player;
 let playerReady = false;
 
 const markers = [];
+const chordGroups = [];
+
 let selectedMarker = null;
+let selectedChordGroup = null;
 
 $(document).ready(() => {
   UKU.injectVideoJs().then(() => {
@@ -48,11 +51,11 @@ $(document).ready(() => {
       const kekMarker = createMarker(20, 'Kek');
       const cheburekMarker = createMarker(100, 'Cheburek');
 
-      addMarkerToUI(kekMarker);
-      addMarkerToUI(cheburekMarker);
-
       markers.push(kekMarker);
       markers.push(cheburekMarker);
+
+      addMarkerToUI(kekMarker);
+      addMarkerToUI(cheburekMarker);
 
       sortMarkers();
     }
@@ -103,6 +106,17 @@ $(document).ready(() => {
     }
   };
 
+  const onMarkerClicked = (marker) => {
+    switch (section) {
+      case MARKERS:
+        onMarkerMarkerClicked(marker);
+        break;
+      case MARKERS:
+        onChordMarkerClicked(marker);
+        break;
+    }
+  };
+
   const removeMarkersFromPlayer = () => {
     if (player) {
       player.markers.removeAll();
@@ -112,6 +126,7 @@ $(document).ready(() => {
   const setupMarkersSection = () => {
     removeMarkersFromPlayer();
     addMarkersToPlayer(markers);
+    deselectMarker();
   };
 
   const goToMarker = (marker) => {
@@ -147,6 +162,7 @@ $(document).ready(() => {
     selectedMarker.button.removeClass('active');
     selectedMarker = null;
     setupMarkerCreation();
+    UKU.inputVal('chord_group_name', '');
   };
 
   const selectMarker = (marker) => {
@@ -177,7 +193,7 @@ $(document).ready(() => {
     }
   };
 
-  const onMarkerClicked = (marker) => {
+  const onMarkerMarkerClicked = (marker) => {
     editMarker(marker);
   };
 
@@ -185,17 +201,21 @@ $(document).ready(() => {
     editMarker(marker);
   };
 
+  const compareMarkers = (a, b) => {
+    return a.getTime() - b.getTime();
+  };
+
+  const compareMarkersButtons = (a, b) => {
+    return a.marker.getTime() - b.marker.getTime();
+  };
+
   const sortMarkers = () => {
-    markers.sort((a, b) => {
-      return a.getTime() - b.getTime();
-    });
+    markers.sort(compareMarkers);
 
     const list = $('#markersList');
     const buttons = list.children();
 
-    Array.prototype.sort.call(buttons, (a, b) => {
-      return a.marker.getTime() - b.marker.getTime();
-    });
+    Array.prototype.sort.call(buttons, compareMarkersButtons);
 
     list.append(buttons);
   };
@@ -243,10 +263,11 @@ $(document).ready(() => {
     const markerName = UKU.inputVal('marker_name');
     const marker = createMarker(currentTime, markerName);
 
-    addMarkerToPlayer(marker);
-    addMarkerToUI(marker);
     markers.push(marker);
+    addMarkerToUI(marker);
     sortMarkers();
+    addMarkerToPlayer(marker);
+    UKU.inputVal('marker_name', '');
   });
 
   $('#saveMarkerBtn').click(() => {
@@ -264,16 +285,120 @@ $(document).ready(() => {
 
   const setupChordsSection = () => {
     removeMarkersFromPlayer();
+    addMarkersToPlayer(chordGroups);
+    deselectChordGroup();
   };
 
-  const hideChordControls = () => {
+  const hideChordGroupControls = () => {
     $('#createChordsGroupBtn').hide();
     $('#createChordBtn').hide();
+    $('#saveChordsGroupBtn').hide();
+    $('#cancelChordsGroupBtn').hide();
+    $('#deleteChordsGroupBtn').hide();
   };
 
   const setupChordGroupCreation = () => {
-    hideChordControls();
+    hideChordGroupControls();
     $('#createChordsGroupBtn').show();
+  };
+
+  const createChordGroup = (time, text) => {
+    const data = {
+      time,
+      text,
+      class: 'chord-group-marker',
+    };
+    const chordGroup = new ChordGroup();
+    chordGroup.data = data;
+    data.marker = chordGroup;
+    return chordGroup;
+  };
+
+  const addChordGroupToUI = (chordGroup) => {
+    const buttonNative = document.createElement('button');
+    const button = $(buttonNative);
+    button.html(chordGroup.getText());
+    button.addClass('list-group-item list-group-item-action')
+    button.click(() => onChordGroupButtonClicked(chordGroup))
+    $('#chordGroupsList').append(button);
+
+    chordGroup.button = button;
+    chordGroup.buttonNative = buttonNative;
+    buttonNative.marker = chordGroup;
+  };
+
+  const onChordGroupButtonClicked = (chordGroup) => {
+    editChordGroup(chordGroup);
+  };
+
+  const editChordGroup = (chordGroup) => {
+    const isActive = chordGroup.button.hasClass('active');
+
+    deselectChordGroup();
+
+    if (!isActive) {
+      selectChordGroup(chordGroup);
+      setupChordGroupEditing();
+      goToChordGroup(selectedChordGroup);
+    }
+  };
+
+  const goToChordGroup = (chordGroup) => {
+    player.currentTime(chordGroup.getTime());
+  };
+
+  const setupChordGroupEditing = () => {
+    hideChordGroupControls();
+    $('#saveChordsGroupBtn').show();
+    $('#cancelChordsGroupBtn').show();
+    $('#deleteChordsGroupBtn').show();
+    UKU.inputVal('chord_group_name', selectedChordGroup.getText());
+  };
+
+  const deselectChordGroup = () => {
+    if (!selectedChordGroup) {
+      return;
+    }
+
+    selectedChordGroup.button.removeClass('active');
+    selectedChordGroup = null;
+    setupChordGroupCreation();
+    UKU.inputVal('chord_group_name', '');
+  };
+
+  const selectChordGroup = (chordGroup) => {
+    chordGroup.button.addClass('active');
+    selectedChordGroup = chordGroup;
+  };
+
+  const deleteChordGroup = (chordGroup) => {
+    if (selectedChordGroup === chordGroup) {
+      selectedChordGroup = null;
+    }
+
+    const index = chordGroups.indexOf(chordGroup);
+    chordGroups.splice(index, 1);
+    player.markers.remove([index]);
+    chordGroup.removeButton();
+  };
+
+  const sortChordGroups = () => {
+    chordGroups.sort(compareMarkers);
+
+    const list = $('#chordGroupsList');
+    const buttons = list.children();
+
+    Array.prototype.sort.call(buttons, compareMarkersButtons);
+
+    list.append(buttons);
+  };
+
+  const addChordGroupToPlayer = (chordGroup) => {
+    player.markers.add([chordGroup.data]);
+  };
+
+  const onChordMarkerClicked = (marker) => {
+    editChordGroup(marker);
   };
 
   $('#createChordsGroupBtn').click(() => {
@@ -282,12 +407,27 @@ $(document).ready(() => {
     }
 
     const currentTime = player.currentTime();
-    console.log(currentTime);
+    const chordGroupName = UKU.inputVal('chord_group_name');
+    const marker = createChordGroup(currentTime, chordGroupName);
 
-    // addMarkerToPlayer(marker);
-    // addMarkerToUI(marker);
-    // markers.push(marker);
-    // sortMarkers();
+    chordGroups.push(marker);
+    addChordGroupToUI(marker);
+    sortChordGroups();
+    addChordGroupToPlayer(marker);
+    UKU.inputVal('chord_group_name', '');
+  });
+
+  $('#saveChordsGroupBtn').click(() => {
+    selectedChordGroup.setText(UKU.inputVal('chord_group_name'));
+  });
+
+  $('#cancelChordsGroupBtn').click(() => {
+    deselectChordGroup();
+  });
+
+  $('#deleteChordsGroupBtn').click(() => {
+    deleteChordGroup(selectedChordGroup);
+    setupChordGroupCreation();
   });
 
   setupMarkerCreation();

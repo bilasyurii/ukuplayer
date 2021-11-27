@@ -31,6 +31,14 @@ class Marker {
   }
 }
 
+class ChordGroup extends Marker {
+  constructor() {
+    super();
+
+    this.chords = [];
+  }
+}
+
 const UKU = {};
 
 (() => {

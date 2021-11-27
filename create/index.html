@@ -68,10 +68,10 @@
 
       <div class="tab-content mt-3" id="sectionContent">
         <div class="tab-pane fade show active" id="markers" role="tabpanel" aria-labelledby="markers-tab">
-          <label for="marker-name">Name:</label>
+          <label for="marker_name">Name:</label>
           <input type="text" class="form-control" placeholder="Enter name of the marker" name="marker_name">
-
           <button class="btn btn-primary mt-3" id="createMarkerBtn">Create marker</button>
+
           <button class="btn btn-primary mt-3" id="saveMarkerBtn">Save</button>
           <button class="btn btn-primary mt-3" id="cancelMarkerBtn">Cancel</button>
           <button class="btn btn-primary mt-3" id="deleteMarkerBtn">Delete</button>
@@ -80,8 +80,17 @@
         </div>
 
         <div class="tab-pane fade" id="chords" role="tabpanel" aria-labelledby="chords-tab">
-          <button class="btn btn-primary" id="createChordsGroupBtn">Create chords group</button>
+          <label for="chord_group_name">Name:</label>
+          <input type="text" class="form-control" placeholder="Enter name of the chord group" name="chord_group_name">
+          <button class="btn btn-primary mt-3" id="createChordsGroupBtn">Create chords group</button>
+
+          <button class="btn btn-primary mt-3" id="saveChordsGroupBtn">Save</button>
+          <button class="btn btn-primary mt-3" id="cancelChordsGroupBtn">Cancel</button>
+          <button class="btn btn-primary mt-3" id="deleteChordsGroupBtn">Delete</button>
+
           <button class="btn btn-primary" id="createChordBtn">Create chord</button>
+
+          <div class="list-group mt-3" id="chordGroupsList"></div>
         </div>
       </div>
     </div>

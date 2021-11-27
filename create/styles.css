@@ -31,3 +31,7 @@ body {
   display: flex;
   flex-direction: column;
 }
+
+.chord-group-marker {
+  background-color: yellow !important;
+}
