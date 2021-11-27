@@ -123,8 +123,23 @@ $(document).ready(() => {
     editMarker(marker);
   };
 
-  const onMarkerButtonClicked = (button) => {
-    editMarker(button.marker);
+  const onMarkerButtonClicked = (marker) => {
+    editMarker(marker);
+  };
+
+  const sortMarkers = () => {
+    markers.sort((a, b) => {
+      return a.getTime() - b.getTime();
+    });
+
+    const list = $('#markersList');
+    const buttons = list.children();
+
+    Array.prototype.sort.call(buttons, (a, b) => {
+      return a.marker.getTime() - b.marker.getTime();
+    });
+
+    list.append(buttons);
   };
 
   const createMarker = (time, text) => {
@@ -134,19 +149,23 @@ $(document).ready(() => {
     };
     player.markers.add([data]);
 
-    const button = $(document.createElement('button'));
+    const buttonNative = document.createElement('button');
+    const button = $(buttonNative);
     button.html(text);
     button.addClass('list-group-item list-group-item-action')
-    button.click(() => onMarkerButtonClicked(button))
+    button.click(() => onMarkerButtonClicked(marker))
     $('#markersList').append(button);
 
     const marker = new Marker();
     marker.data = data;
     marker.button = button;
+    marker.buttonNative = buttonNative;
     markers.push(marker);
 
     data.marker = marker;
-    button.marker = marker;
+    buttonNative.marker = marker;
+
+    sortMarkers();
   };
 
   $('#createMarkerBtn').click(() => {

@@ -57,7 +57,7 @@
         }
       '></video>
 
-      <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <ul class="nav nav-tabs mt-3" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
           <button class="nav-link active" id="markers-tab" data-bs-toggle="tab" data-bs-target="#markers" type="button" role="tab" aria-controls="markers" aria-selected="true">Markers</button>
         </li>
@@ -66,20 +66,17 @@
         </li>
       </ul>
 
-      <div class="tab-content" id="myTabContent">
+      <div class="tab-content mt-3" id="myTabContent">
         <div class="tab-pane fade show active" id="markers" role="tabpanel" aria-labelledby="markers-tab">
-          <div class="mt-3">
-            <label for="marker-name">Name:</label>
-            <input type="text" class="form-control" placeholder="Enter name of the marker" name="marker_name">
-          </div>
+          <label for="marker-name">Name:</label>
+          <input type="text" class="form-control" placeholder="Enter name of the marker" name="marker_name">
 
           <button class="btn btn-primary mt-3" id="createMarkerBtn">Create marker</button>
           <button class="btn btn-primary mt-3" id="saveMarkerBtn">Save</button>
           <button class="btn btn-primary mt-3" id="cancelMarkerBtn">Cancel</button>
           <button class="btn btn-primary mt-3" id="deleteMarkerBtn">Delete</button>
 
-          <div class="list-group mt-3" id="markersList">
-          </div>
+          <div class="list-group mt-3" id="markersList"></div>
         </div>
 
         <div class="tab-pane fade" id="chords" role="tabpanel" aria-labelledby="chords-tab">

@@ -8,8 +8,9 @@ class Song {
 
 class Marker {
   constructor() {
-    this.button = null;
     this.data = null;
+    this.button = null;
+    this.buttonNative = null;
   }
 
   getTime() {
