@@ -1,8 +1,13 @@
 const DEBUG = true;
+const MARKERS = 'markers';
+const CHORDS = 'chords';
+
+let section = MARKERS;
 
 const song = new Song();
 
 let player;
+let playerReady = false;
 
 const markers = [];
 let selectedMarker = null;
@@ -34,6 +39,11 @@ $(document).ready(() => {
       },
     });
 
+    player.one('play', () => {
+      playerReady = true;
+      setupSection(section);
+    });
+
     if (DEBUG) {
       const kekMarker = createMarker(20, 'Kek');
       const cheburekMarker = createMarker(100, 'Cheburek');
@@ -45,11 +55,6 @@ $(document).ready(() => {
       markers.push(cheburekMarker);
 
       sortMarkers();
-
-      player.one('play', () => {
-        addMarkerToPlayer(kekMarker);
-        addMarkerToPlayer(cheburekMarker);
-      });
     }
   });
 
@@ -67,6 +72,48 @@ $(document).ready(() => {
     setupSongContainer.show();
   });
 
+  $('#sectionTabs').on('show.bs.tab', (e) => {
+    const tab = e.target;
+    const sectionName = tab.getAttribute('aria-controls');
+
+    switch (sectionName) {
+      case MARKERS:
+        section = MARKERS;
+        break;
+      case CHORDS:
+        section = CHORDS;
+        break;
+    }
+
+    setupSection(section);
+  });
+
+  const setupSection = (section) => {
+    if (!playerReady) {
+      return;
+    }
+
+    switch (section) {
+      case MARKERS:
+        setupMarkersSection();
+        break;
+      case CHORDS:
+        setupChordsSection();
+        break;
+    }
+  };
+
+  const removeMarkersFromPlayer = () => {
+    if (player) {
+      player.markers.removeAll();
+    }
+  };
+
+  const setupMarkersSection = () => {
+    removeMarkersFromPlayer();
+    addMarkersToPlayer(markers);
+  };
+
   const goToMarker = (marker) => {
     player.currentTime(marker.getTime());
   };
@@ -76,7 +123,7 @@ $(document).ready(() => {
     $('#saveMarkerBtn').hide();
     $('#cancelMarkerBtn').hide();
     $('#deleteMarkerBtn').hide();
-  }
+  };
 
   const setupMarkerCreation = () => {
     hideMarkerControls();
@@ -168,6 +215,12 @@ $(document).ready(() => {
     player.markers.add([marker.data]);
   };
 
+  const addMarkersToPlayer = (markers) => {
+    markers.forEach((marker) => {
+      addMarkerToPlayer(marker);
+    });
+  };
+
   const addMarkerToUI = (marker) => {
     const buttonNative = document.createElement('button');
     const button = $(buttonNative);
@@ -209,7 +262,36 @@ $(document).ready(() => {
     setupMarkerCreation();
   });
 
+  const setupChordsSection = () => {
+    removeMarkersFromPlayer();
+  };
+
+  const hideChordControls = () => {
+    $('#createChordsGroupBtn').hide();
+    $('#createChordBtn').hide();
+  };
+
+  const setupChordGroupCreation = () => {
+    hideChordControls();
+    $('#createChordsGroupBtn').show();
+  };
+
+  $('#createChordsGroupBtn').click(() => {
+    if (!player) {
+      return;
+    }
+
+    const currentTime = player.currentTime();
+    console.log(currentTime);
+
+    // addMarkerToPlayer(marker);
+    // addMarkerToUI(marker);
+    // markers.push(marker);
+    // sortMarkers();
+  });
+
   setupMarkerCreation();
+  setupChordGroupCreation();
 
   if (DEBUG) {
     createSongContainer.hide();
