@@ -35,9 +35,20 @@ $(document).ready(() => {
     });
 
     if (DEBUG) {
+      const kekMarker = createMarker(20, 'Kek');
+      const cheburekMarker = createMarker(100, 'Cheburek');
+
+      addMarkerToUI(kekMarker);
+      addMarkerToUI(cheburekMarker);
+
+      markers.push(kekMarker);
+      markers.push(cheburekMarker);
+
+      sortMarkers();
+
       player.one('play', () => {
-        createMarker(20, 'Kek');
-        createMarker(100, 'Cheburek');
+        addMarkerToPlayer(kekMarker);
+        addMarkerToPlayer(cheburekMarker);
       });
     }
   });
@@ -147,25 +158,27 @@ $(document).ready(() => {
       time,
       text,
     };
-    player.markers.add([data]);
+    const marker = new Marker();
+    marker.data = data;
+    data.marker = marker;
+    return marker;
+  };
 
+  const addMarkerToPlayer = (marker) => {
+    player.markers.add([marker.data]);
+  };
+
+  const addMarkerToUI = (marker) => {
     const buttonNative = document.createElement('button');
     const button = $(buttonNative);
-    button.html(text);
+    button.html(marker.getText());
     button.addClass('list-group-item list-group-item-action')
     button.click(() => onMarkerButtonClicked(marker))
     $('#markersList').append(button);
 
-    const marker = new Marker();
-    marker.data = data;
     marker.button = button;
     marker.buttonNative = buttonNative;
-    markers.push(marker);
-
-    data.marker = marker;
     buttonNative.marker = marker;
-
-    sortMarkers();
   };
 
   $('#createMarkerBtn').click(() => {
@@ -175,8 +188,12 @@ $(document).ready(() => {
 
     const currentTime = player.currentTime();
     const markerName = UKU.inputVal('marker_name');
+    const marker = createMarker(currentTime, markerName);
 
-    createMarker(currentTime, markerName);
+    addMarkerToPlayer(marker);
+    addMarkerToUI(marker);
+    markers.push(marker);
+    sortMarkers();
   });
 
   $('#saveMarkerBtn').click(() => {
