@@ -1,14 +1,37 @@
-const song = new Song();
 const DEBUG = true;
+
+const song = new Song();
+let player;
 
 $(document).ready(() => {
   UKU.injectVideoJs().then(() => {
-    const player = videojs($('#ukuVideo')[0]);
+    player = videojs($('#ukuVideo')[0]);
     player.seekButtons({
       forward: 1,
       back: 1,
       forwardIndex: 3,
       backIndex: 3,
+    });
+    player.markers({
+      markerStyle: {
+        'border-radius': '40%',
+        'background-color': '#0d6efd',
+      },
+      markerTip: {
+        display: true,
+        text: (marker) => {
+          return marker.text;
+        },
+      },
+      onMarkerClick: (marker) => {
+        console.log(marker);
+      },
+      markers: [
+        {
+          time: 10,
+          text: 'test',
+        },
+      ],
     });
   });
 
@@ -24,6 +47,19 @@ $(document).ready(() => {
 
     createSongContainer.hide();
     setupSongContainer.show();
+  });
+
+  $('#createMarkerBtn').click(() => {
+    if (!player) {
+      return;
+    }
+
+    player.markers.add([
+      {
+        time: 100,
+        text: 'hi)))',
+      },
+    ])
   });
 
   if (DEBUG) {

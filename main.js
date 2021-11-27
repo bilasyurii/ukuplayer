@@ -85,7 +85,7 @@ const injectVideoJs = () => {
     let count = 0;
 
     const resolveStep = () => {
-      if (++count === 6) {
+      if (++count === 8) {
         resolve();
       }
     };
@@ -96,6 +96,8 @@ const injectVideoJs = () => {
     injectVideoJsYoutubePlugin(resolveStep);
     injectVideoJsSeekButtonsPluginCode(resolveStep);
     injectVideoJsSeekButtonsPluginStyles(resolveStep);
+    injectVideoJsMarkersPluginCode(resolveStep);
+    injectVideoJsMarkersPluginStyles(resolveStep);
   });
 };
 
@@ -155,6 +157,25 @@ const injectVideoJsSeekButtonsPluginCode = (cb) => {
 const injectVideoJsSeekButtonsPluginStyles = (cb) => {
   const link = document.createElement('link');
   link.href = 'https://cdn.jsdelivr.net/npm/videojs-seek-buttons/dist/videojs-seek-buttons.css';
+  link.rel = 'stylesheet';
+  link.async = false;
+  link.onload = cb;
+  document.head.prepend(link);
+};
+
+const injectVideoJsMarkersPluginCode = (cb) => {
+  const script = document.createElement('script');
+  script.src = 'https://unpkg.com/videojs-markers-plugin@1.0.2/dist/videojs-markers-plugin.min.js';
+  script.crossOrigin = 'anonymous';
+  script.referrerPolicy = 'no-referrer';
+  script.async = false;
+  script.onload = cb;
+  document.head.appendChild(script);
+};
+
+const injectVideoJsMarkersPluginStyles = (cb) => {
+  const link = document.createElement('link');
+  link.href = 'https://unpkg.com/videojs-markers-plugin@1.0.2/dist/videojs.markers.plugin.min.css';
   link.rel = 'stylesheet';
   link.async = false;
   link.onload = cb;
