@@ -54,10 +54,12 @@ $(document).ready(() => {
       return;
     }
 
+    const markerName = UKU.inputVal('marker_name');
+
     player.markers.add([
       {
-        time: 100,
-        text: 'hi)))',
+        time: player.currentTime(),
+        text: markerName,
       },
     ])
   });
