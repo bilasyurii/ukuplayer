@@ -64,6 +64,7 @@ $(document).ready(() => {
     $('#createMarkerBtn').hide();
     $('#saveMarkerBtn').hide();
     $('#cancelMarkerBtn').hide();
+    $('#deleteMarkerBtn').hide();
   }
 
   const setupMarkerCreation = () => {
@@ -76,6 +77,7 @@ $(document).ready(() => {
     hideMarkerControls();
     $('#saveMarkerBtn').show();
     $('#cancelMarkerBtn').show();
+    $('#deleteMarkerBtn').show();
     UKU.inputVal('marker_name', selectedMarker.getText());
   };
 
@@ -92,6 +94,17 @@ $(document).ready(() => {
   const selectMarker = (marker) => {
     marker.button.addClass('active');
     selectedMarker = marker;
+  };
+
+  const deleteMarker = (marker) => {
+    if (selectedMarker === marker) {
+      selectedMarker = null;
+    }
+
+    const index = markers.indexOf(marker);
+    markers.splice(index, 1);
+    player.markers.remove([index]);
+    marker.removeButton();
   };
 
   const editMarker = (marker) => {
@@ -153,6 +166,11 @@ $(document).ready(() => {
 
   $('#cancelMarkerBtn').click(() => {
     deselectMarker();
+  });
+
+  $('#deleteMarkerBtn').click(() => {
+    deleteMarker(selectedMarker);
+    setupMarkerCreation();
   });
 
   setupMarkerCreation();

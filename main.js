@@ -24,6 +24,10 @@ class Marker {
     this.data.text = text;
     this.button.html(text);
   }
+
+  removeButton() {
+    this.button.remove();
+  }
 }
 
 const UKU = {};
