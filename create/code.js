@@ -29,8 +29,8 @@ $(document).ready(() => {
           return marker.text;
         },
       },
-      onMarkerClick: (marker) => {
-        console.log(marker);
+      onMarkerClick: (data) => {
+        onMarkerClicked(data.marker);
       },
     });
 
@@ -92,18 +92,26 @@ $(document).ready(() => {
   const selectMarker = (marker) => {
     marker.button.addClass('active');
     selectedMarker = marker;
-    setupMarkerEditing();
-    goToMarker(selectedMarker);
   };
 
-  const onMarkerButtonClicked = (button) => {
-    const isActive = button.hasClass('active');
+  const editMarker = (marker) => {
+    const isActive = marker.button.hasClass('active');
 
     deselectMarker();
 
     if (!isActive) {
-      selectMarker(button.marker);
+      selectMarker(marker);
+      setupMarkerEditing();
+      goToMarker(selectedMarker);
     }
+  };
+
+  const onMarkerClicked = (marker) => {
+    editMarker(marker);
+  };
+
+  const onMarkerButtonClicked = (button) => {
+    editMarker(button.marker);
   };
 
   const createMarker = (time, text) => {
@@ -124,6 +132,7 @@ $(document).ready(() => {
     marker.button = button;
     markers.push(marker);
 
+    data.marker = marker;
     button.marker = marker;
   };
 
