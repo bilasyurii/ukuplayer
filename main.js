@@ -6,6 +6,13 @@ class Song {
   }
 }
 
+class Marker {
+  constructor() {
+    this.button = null;
+    this.data = null;
+  }
+}
+
 const UKU = {};
 
 (() => {
@@ -82,22 +89,33 @@ const injectVideoJs = () => {
   window.HELP_IMPROVE_VIDEOJS  = false;
 
   return new Promise((resolve) => {
-    let count = 0;
+    const steps = [];
 
+    const addStep = (step) => {
+      steps.push(step);
+    };
+
+    addStep(injectVideoJsCode);
+    addStep(injectVideoJsTheme);
+    addStep(injectVideoJsStyles);
+    addStep(injectVideoJsYoutubePlugin);
+    addStep(injectVideoJsSeekButtonsPluginCode);
+    addStep(injectVideoJsSeekButtonsPluginStyles);
+    addStep(injectVideoJsMarkersPluginCode);
+    addStep(injectVideoJsMarkersPluginStyles);
+
+    let progress = 0;
+    const count = steps.length;
     const resolveStep = () => {
-      if (++count === 8) {
+      ++progress;
+      if (progress === count) {
         resolve();
       }
     };
 
-    injectVideoJsCode(resolveStep);
-    injectVideoJsTheme(resolveStep);
-    injectVideoJsStyles(resolveStep);
-    injectVideoJsYoutubePlugin(resolveStep);
-    injectVideoJsSeekButtonsPluginCode(resolveStep);
-    injectVideoJsSeekButtonsPluginStyles(resolveStep);
-    injectVideoJsMarkersPluginCode(resolveStep);
-    injectVideoJsMarkersPluginStyles(resolveStep);
+    for (let i = 0; i < count; ++i) {
+      steps[i](resolveStep);
+    }
   });
 };
 
