@@ -31,6 +31,12 @@ class Marker {
   }
 }
 
+class Chord {
+  constructor() {
+    this.name = '';
+  }
+}
+
 class ChordGroup extends Marker {
   constructor() {
     super();
@@ -46,7 +52,9 @@ const UKU = {};
 const boot = () => {
   setupTitle();
   injectStyles();
-  injectScripts();
+  injectScripts().then(() => {
+    setupUtils();
+  });
 };
 
 const setupTitle = () => {
@@ -60,9 +68,34 @@ const injectStyles = () => {
 };
 
 const injectScripts = () => {
-  injectJQuery();
-  injectBootstrapScript();
-  injectPageCode();
+  return new Promise((resolve) => {
+    const steps = [];
+
+    const addStep = (step) => {
+      steps.push(step);
+    };
+
+    addStep(injectJQuery);
+    addStep(injectBootstrapScript);
+    addStep(injectPageCode);
+
+    let progress = 0;
+    const count = steps.length;
+    const resolveStep = () => {
+      ++progress;
+      if (progress === count) {
+        resolve();
+      }
+    };
+
+    for (let i = 0; i < count; ++i) {
+      steps[i](resolveStep);
+    }
+  });
+};
+
+const setupUtils = () => {
+  setupJqueryUtils();
 };
 
 const injectBootstrap = () => {
@@ -88,27 +121,44 @@ const injectPageStyles = () => {
   document.head.appendChild(link);
 };
 
-const injectJQuery = () => {
+const injectJQuery = (cb) => {
   const script = document.createElement('script');
   script.src = 'https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js';
   script.async = false;
+  script.onload = cb;
   document.head.appendChild(script);
 };
 
-const injectBootstrapScript = () => {
+const injectBootstrapScript = (cb) => {
   const script = document.createElement('script');
   script.src = 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js';
   script.async = false;
   script.integrity = 'sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p';
   script.crossOrigin = 'anonymous';
+  script.onload = cb;
   document.head.appendChild(script);
 };
 
-const injectPageCode = () => {
+const injectPageCode = (cb) => {
   const script = document.createElement('script');
   script.src = './code.js';
   script.async = false;
+  script.onload = cb;
   document.head.appendChild(script);
+};
+
+const setupJqueryUtils = () => {
+  UKU.inputVal = (name, value) => {
+    const input = $(`input[name="${name}"]`);
+
+    if (value === undefined) {
+      return input.val();
+    }
+
+    return input.val(value);
+  };
+
+  UKU.events = $({});
 };
 
 const injectVideoJs = () => {
@@ -226,16 +276,15 @@ const injectVideoJsMarkersPluginStyles = (cb) => {
   document.head.prepend(link);
 };
 
+const injectChordPicker = () => {
+  const script = document.createElement('script');
+  script.src = '/logic/chord-picker.js';
+  script.async = false;
+  document.head.appendChild(script);
+};
+
+UKU.injectChordPicker = injectChordPicker;
+
 boot();
 
 })();
-
-UKU.inputVal = (name, value) => {
-  const input = $(`input[name="${name}"]`);
-
-  if (value === undefined) {
-    return input.val();
-  }
-
-  return input.val(value);
-};

@@ -14,8 +14,11 @@ const chordGroups = [];
 
 let selectedMarker = null;
 let selectedChordGroup = null;
+let selectedChord = null;
 
 $(document).ready(() => {
+  UKU.injectChordPicker();
+
   UKU.injectVideoJs().then(() => {
     player = videojs($('#ukuVideo')[0]);
 
@@ -352,6 +355,7 @@ $(document).ready(() => {
     $('#saveChordsGroupBtn').show();
     $('#cancelChordsGroupBtn').show();
     $('#deleteChordsGroupBtn').show();
+    $('#createChordBtn').show();
     UKU.inputVal('chord_group_name', selectedChordGroup.getText());
   };
 
@@ -428,6 +432,14 @@ $(document).ready(() => {
   $('#deleteChordsGroupBtn').click(() => {
     deleteChordGroup(selectedChordGroup);
     setupChordGroupCreation();
+  });
+
+  $('#createChordBtn').click(() => {
+    UKU.showChordModal();
+  });
+
+  UKU.events.on('chordPicked', (e, chord) => {
+    console.log(chord);
   });
 
   setupMarkerCreation();
