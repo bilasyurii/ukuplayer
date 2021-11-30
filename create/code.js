@@ -1,6 +1,8 @@
 const DEBUG = true;
 const MARKERS = 'markers';
 const CHORDS = 'chords';
+const CREATE_CHORD = 'create chord';
+const EDIT_CHORD = 'edit chord';
 
 let section = MARKERS;
 
@@ -15,6 +17,7 @@ const chordGroups = [];
 let selectedMarker = null;
 let selectedChordGroup = null;
 let selectedChord = null;
+let chordAction = CREATE_CHORD;
 
 $(document).ready(() => {
   UKU.injectChordPicker();
@@ -154,7 +157,9 @@ $(document).ready(() => {
     $('#saveMarkerBtn').show();
     $('#cancelMarkerBtn').show();
     $('#deleteMarkerBtn').show();
-    UKU.inputVal('marker_name', selectedMarker.getText());
+
+    const markerName = selectedMarker.getText();
+    UKU.inputVal('marker_name', markerName);
   };
 
   const deselectMarker = () => {
@@ -274,7 +279,8 @@ $(document).ready(() => {
   });
 
   $('#saveMarkerBtn').click(() => {
-    selectedMarker.setText(UKU.inputVal('marker_name'));
+    const markerName = UKU.inputVal('marker_name');
+    selectedMarker.setText(markerName);
   });
 
   $('#cancelMarkerBtn').click(() => {
@@ -289,6 +295,7 @@ $(document).ready(() => {
   const setupChordsSection = () => {
     removeMarkersFromPlayer();
     addMarkersToPlayer(chordGroups);
+    removeChordsFromUI();
     deselectChordGroup();
   };
 
@@ -337,10 +344,12 @@ $(document).ready(() => {
   const editChordGroup = (chordGroup) => {
     const isActive = chordGroup.button.hasClass('active');
 
+    removeChordsFromUI();
     deselectChordGroup();
 
     if (!isActive) {
       selectChordGroup(chordGroup);
+      addChordsFromGroup(chordGroup);
       setupChordGroupEditing();
       goToChordGroup(selectedChordGroup);
     }
@@ -356,7 +365,17 @@ $(document).ready(() => {
     $('#cancelChordsGroupBtn').show();
     $('#deleteChordsGroupBtn').show();
     $('#createChordBtn').show();
-    UKU.inputVal('chord_group_name', selectedChordGroup.getText());
+
+    const chordGroupName = selectedChordGroup.getText();
+    UKU.inputVal('chord_group_name', chordGroupName);
+  };
+
+  const addChordsFromGroup = (chordGroup) => {
+    chordGroup.chords.forEach((chord) => addChordToUI(chord));
+  };
+
+  const removeChordsFromUI = () => {
+    $('#chordsList').empty();
   };
 
   const deselectChordGroup = () => {
@@ -422,10 +441,12 @@ $(document).ready(() => {
   });
 
   $('#saveChordsGroupBtn').click(() => {
-    selectedChordGroup.setText(UKU.inputVal('chord_group_name'));
+    const chordGroupName = UKU.inputVal('chord_group_name');
+    selectedChordGroup.setText(chordGroupName);
   });
 
   $('#cancelChordsGroupBtn').click(() => {
+    removeChordsFromUI();
     deselectChordGroup();
   });
 
@@ -435,12 +456,68 @@ $(document).ready(() => {
   });
 
   $('#createChordBtn').click(() => {
+    chordAction = CREATE_CHORD;
     UKU.showChordModal();
   });
 
   UKU.events.on('chordPicked', (e, chord) => {
-    console.log(chord);
+    switch (chordAction) {
+      case CREATE_CHORD:
+        createChord(chord);
+        break;
+      case EDIT_CHORD:
+        editChord(chord);
+        break;
+    }
   });
+
+  const addChordToUI = (chord) => {
+    const card = $(`
+<div class="card mx-2">
+  <h5 class="card-title text-center m-3">C#</h5>
+
+  <div class="btn-group-vertical">
+    <button class="btn btn-primary rounded-0 btn-edit">Edit</button>
+    <button class="btn btn-primary btn-delete">Delete</button>
+  </div>
+</div>
+`);
+    const cardNative = card[0];
+    card.find('.btn-edit').click(() => onEditChordClicked(chord));
+    card.find('.btn-delete').click(() => onDeleteChordClicked(chord));
+    $('#chordsList').append(card);
+
+    chord.card = card;
+    chord.cardNative = cardNative;
+    cardNative.chord = chord;
+
+    updateChordUI(chord);
+  };
+
+  const updateChordUI = (chord) => {
+    chord.card.find('.card-title').html(chord.name);
+  };
+
+  const createChord = (chord) => {
+    selectedChordGroup.chords.push(chord);
+    chord.group = selectedChordGroup;
+    addChordToUI(chord);
+  };
+
+  const editChord = (chord) => {
+    updateChordUI(chord);
+  };
+
+  const onEditChordClicked = (chord) => {
+    selectedChord = chord;
+    chordAction = EDIT_CHORD;
+    UKU.showChordModal(chord);
+  };
+
+  const onDeleteChordClicked = (chord) => {
+    chord.removeCard();
+    chord.group.removeChord(chord);
+  };
 
   setupMarkerCreation();
   setupChordGroupCreation();

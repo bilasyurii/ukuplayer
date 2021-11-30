@@ -35,3 +35,7 @@ body {
 .chord-group-marker {
   background-color: yellow !important;
 }
+
+.chord-list .card {
+  min-width: 10rem;
+}

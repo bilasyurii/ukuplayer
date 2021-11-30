@@ -34,6 +34,13 @@ class Marker {
 class Chord {
   constructor() {
     this.name = '';
+    this.group = null;
+    this.card = null;
+    this.cardNative = null;
+  }
+
+  removeCard() {
+    this.card.remove();
   }
 }
 
@@ -42,6 +49,10 @@ class ChordGroup extends Marker {
     super();
 
     this.chords = [];
+  }
+
+  removeChord(chord) {
+    this.chords.splice(this.chords.indexOf(chord), 1);
   }
 }
 
