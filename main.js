@@ -14,8 +14,10 @@ class Song {
       title: this.title,
       link: this.link,
       visibility: this.visibility,
-      markers: this.markers.map((marker) => marker.serialize()),
-      chordGroups: this.chordGroups.map((chordGroup) => chordGroup.serialize()),
+      options: JSON.stringify({
+        markers: this.markers.map((marker) => marker.serialize()),
+        chordGroups: this.chordGroups.map((chordGroup) => chordGroup.serialize()),
+      }),
     };
   }
 }

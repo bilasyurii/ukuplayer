@@ -1,4 +1,4 @@
-const DEBUG = true;
+const DEBUG = false;
 const MARKERS = 'markers';
 const CHORDS = 'chords';
 const CREATE_CHORD = 'create chord';
@@ -90,8 +90,8 @@ $(document).ready(() => {
   setupSongContainer.hide();
 
   $('#continueBtn').click(() => {
-    song.artist = UKU.inputVal('artist');
-    song.title = UKU.inputVal('title');
+    song.artist = UKU.inputVal('artist') || 'Unnamed';
+    song.title = UKU.inputVal('title') || 'Untitled';
     song.link = UKU.inputVal('link') || 'https://www.youtube.com/watch?v=67Cv0dMmi_8';
 
     player.ready(() => {
@@ -293,7 +293,7 @@ $(document).ready(() => {
     }
 
     const currentTime = player.currentTime();
-    const markerName = UKU.inputVal('marker_name');
+    const markerName = UKU.inputVal('marker_name') || 'Unnamed';
     const marker = createMarker(currentTime, markerName);
 
     markers.push(marker);
@@ -304,7 +304,7 @@ $(document).ready(() => {
   });
 
   $('#saveMarkerBtn').click(() => {
-    const markerName = UKU.inputVal('marker_name');
+    const markerName = UKU.inputVal('marker_name') || 'Unnamed';
     selectedMarker.setText(markerName);
   });
 
@@ -455,7 +455,7 @@ $(document).ready(() => {
     }
 
     const currentTime = player.currentTime();
-    const chordGroupName = UKU.inputVal('chord_group_name');
+    const chordGroupName = UKU.inputVal('chord_group_name') || 'Unnamed';
     const marker = createChordGroup(currentTime, chordGroupName);
 
     chordGroups.push(marker);
@@ -466,7 +466,7 @@ $(document).ready(() => {
   });
 
   $('#saveChordsGroupBtn').click(() => {
-    const chordGroupName = UKU.inputVal('chord_group_name');
+    const chordGroupName = UKU.inputVal('chord_group_name') || 'Unnamed';
     selectedChordGroup.setText(chordGroupName);
   });
 
@@ -550,7 +550,32 @@ $(document).ready(() => {
     song.chordGroups = chordGroups;
 
     const serialized = song.serialize();
-    const stringified = JSON.stringify(serialized);
+    const artist = serialized.artist;
+    const title = serialized.title;
+    const link = serialized.link;
+    const visibility = serialized.visibility;
+    const options = serialized.options;
+
+    $.post({
+      url: '/backend/create/song.php',
+      dataType: 'json',
+      data: {
+        artist,
+        title,
+        link,
+        visibility,
+        options,
+      },
+    })
+    .done((data) => {
+      if (data.status === true) {
+        const songId = data.songId;
+        window.location.href = '/song?id=' + songId;
+      }
+    })
+    .fail((a, b, c) => {
+      console.error(a, b, c);
+    });
   });
 
   setupMarkerCreation();

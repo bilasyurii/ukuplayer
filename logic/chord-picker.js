@@ -37,7 +37,7 @@ chordPickerModal.find('#chordModalCancelBtn').on('click', () => {
 chordPickerModal.find('#chordModalSaveBtn').on('click', () => {
   closeModal();
 
-  currentChord.name = UKU.inputVal('chord_name');
+  currentChord.name = UKU.inputVal('chord_name') || 'Unnamed';
 
   UKU.events.trigger('chordPicked', [currentChord]);
 });
