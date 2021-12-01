@@ -23,7 +23,13 @@ $(document).ready(() => {
   UKU.injectChordPicker();
 
   UKU.injectVideoJs().then(() => {
-    player = videojs($('#ukuVideo')[0]);
+    player = videojs($('#ukuVideo')[0], {
+      techOrder: ['youtube'],
+      sources: [{
+        type: 'video/youtube',
+        src: 'https://www.youtube.com/watch?v=eJnQBXmZ7Ek&ab_channel=twentyonepilots',
+      }],
+    });
 
     player.seekButtons({
       forward: 1,
@@ -55,15 +61,26 @@ $(document).ready(() => {
 
     if (DEBUG) {
       const kekMarker = createMarker(20, 'Kek');
-      const cheburekMarker = createMarker(100, 'Cheburek');
-
       markers.push(kekMarker);
-      markers.push(cheburekMarker);
-
       addMarkerToUI(kekMarker);
+
+      const cheburekMarker = createMarker(100, 'Cheburek');
+      markers.push(cheburekMarker);
       addMarkerToUI(cheburekMarker);
 
       sortMarkers();
+
+      const kekGroup = createChordGroup(30, 'kek');
+      chordGroups.push(kekGroup);
+      addChordGroupToUI(kekGroup);
+      sortChordGroups();
+      addChordGroupToPlayer(kekGroup);
+
+      const chord = new Chord();
+      chord.name = 'C#';
+      selectedChordGroup = kekGroup;
+      createChord(chord);
+      removeChordsFromUI();
     }
   });
 
@@ -75,7 +92,15 @@ $(document).ready(() => {
   $('#continueBtn').click(() => {
     song.artist = UKU.inputVal('artist');
     song.title = UKU.inputVal('title');
-    song.link = UKU.inputVal('link');
+    song.link = UKU.inputVal('link') || 'https://www.youtube.com/watch?v=67Cv0dMmi_8';
+
+    player.ready(() => {
+      player.poster('');
+      player.src({
+        type: 'video/youtube',
+        src: song.link,
+      });
+    });
 
     createSongContainer.hide();
     setupSongContainer.show();
@@ -518,6 +543,15 @@ $(document).ready(() => {
     chord.removeCard();
     chord.group.removeChord(chord);
   };
+
+  $('#finishBtn').click(() => {
+    song.visibility = UKU.inputRadioVal('visibility');
+    song.markers = markers;
+    song.chordGroups = chordGroups;
+
+    const serialized = song.serialize();
+    const stringified = JSON.stringify(serialized);
+  });
 
   setupMarkerCreation();
   setupChordGroupCreation();

@@ -3,6 +3,20 @@ class Song {
     this.artist = '';
     this.title = '';
     this.link = '';
+    this.visibility = 'public';
+    this.markers = [];
+    this.chordGroups = [];
+  }
+
+  serialize() {
+    return {
+      artist: this.artist,
+      title: this.title,
+      link: this.link,
+      visibility: this.visibility,
+      markers: this.markers.map((marker) => marker.serialize()),
+      chordGroups: this.chordGroups.map((chordGroup) => chordGroup.serialize()),
+    };
   }
 }
 
@@ -29,6 +43,14 @@ class Marker {
   removeButton() {
     this.button.remove();
   }
+
+  serialize() {
+    const data = this.data;
+    return {
+      text: data.text,
+      time: data.time,
+    };
+  }
 }
 
 class Chord {
@@ -42,6 +64,12 @@ class Chord {
   removeCard() {
     this.card.remove();
   }
+
+  serialize() {
+    return {
+      name: this.name,
+    };
+  }
 }
 
 class ChordGroup extends Marker {
@@ -53,6 +81,12 @@ class ChordGroup extends Marker {
 
   removeChord(chord) {
     this.chords.splice(this.chords.indexOf(chord), 1);
+  }
+
+  serialize() {
+    const baseData = super.serialize();
+    baseData.chords = this.chords.map((chord) => chord.serialize());
+    return baseData;
   }
 }
 
@@ -167,6 +201,14 @@ const setupJqueryUtils = () => {
     }
 
     return input.val(value);
+  };
+
+  UKU.inputRadioVal = (name, value) => {
+    if (value === undefined) {
+      return $(`input[name="${name}"]:checked`).val();
+    }
+
+    return $(`input[name="${name}"][value="${value}"]`).click();
   };
 
   UKU.events = $({});

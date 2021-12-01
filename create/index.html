@@ -46,16 +46,7 @@
     </div>
 
     <div class="setup-song-container my-5">
-      <video controls class="video-js vjs-theme-city vjs-fluid" id="ukuVideo" data-setup='
-        {
-          "techOrder": ["youtube"],
-          "sources": [{
-            "type": "video/youtube",
-            "src": "https://www.youtube.com/watch?v=67Cv0dMmi_8"
-          }],
-          "preload": true
-        }
-      '></video>
+      <video controls class="video-js vjs-theme-city vjs-fluid" id="ukuVideo"></video>
 
       <ul class="nav nav-tabs mt-3" id="sectionTabs" role="tablist">
         <li class="nav-item" role="presentation">
@@ -63,6 +54,9 @@
         </li>
         <li class="nav-item" role="presentation">
           <button class="nav-link" id="chords-tab" data-bs-toggle="tab" data-bs-target="#chords" type="button" role="tab" aria-controls="chords" aria-selected="false">Chords</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="finish-tab" data-bs-toggle="tab" data-bs-target="#finish" type="button" role="tab" aria-controls="finish" aria-selected="false">Finish</button>
         </li>
       </ul>
 
@@ -92,9 +86,30 @@
 
           <div class="d-flex flex-row flex-nowrap overflow-auto mt-3 pb-3 chord-list" id="chordsList"></div>
 
-          <div class="list-group mt-3" id="chordGroupsList"></div>
+          <div class="list-group" id="chordGroupsList"></div>
+        </div>
+
+        <div class="tab-pane fade" id="finish" role="tabpanel" aria-labelledby="finish-tab">
+          <label for="visibility">Visibility:</label>
+
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="visibility" value="public" id="publicVisibility" checked>
+            <label class="form-check-label" for="publicVisibility">
+              Public
+            </label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="visibility" value="private" id="privateVisibility">
+            <label class="form-check-label" for="privateVisibility">
+              Private
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-primary mt-3 w-100" id="finishBtn">Finish</button>
         </div>
       </div>
+    </div>
     </div>
   </div>
 </body>
