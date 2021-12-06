@@ -557,7 +557,7 @@ $(document).ready(() => {
     const options = serialized.options;
 
     $.post({
-      url: '/backend/create/song.php',
+      url: '/backend/song/create.php',
       dataType: 'json',
       data: {
         artist,
