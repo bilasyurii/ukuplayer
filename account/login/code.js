@@ -14,7 +14,12 @@ $(document).ready(() => {
     .done((data) => {
       if (data.status === true) {
         window.location.href = '/';
+      } else {
+        console.error(data.error);
       }
+    })
+    .fail((a, b, c) => {
+      console.error(a, b, c);
     });
   });
 });

@@ -1,0 +1,20 @@
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+.library-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.library-list {
+  width: 600px;
+  max-width: 80%;
+}
+
+.song-thumbnail {
+  max-width: 80%;
+}

@@ -1,18 +1,6 @@
 <?php
 
-session_start();
-
-if (!isset($_SESSION['user'])) {
-  echo json_encode([
-    'status' => false,
-    'error' => 'Not authorized',
-  ]);
-
-  exit();
-}
-
-$user = $_SESSION['user'];
-
+require_once '../core/check-authorization.php';
 require_once '../core/connect.php';
 
 $userId =  $user['id'];

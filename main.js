@@ -143,6 +143,7 @@ const injectScripts = () => {
 
 const setupUtils = () => {
   setupJqueryUtils();
+  setupYoutubeUtils();
 };
 
 const injectBootstrap = () => {
@@ -214,6 +215,34 @@ const setupJqueryUtils = () => {
   };
 
   UKU.events = $({});
+};
+
+const setupYoutubeUtils = () => {
+  UKU.parseYoutubeURL = (url) => {
+    const result = {
+      videoId: null
+    };
+
+    const regex = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    let match = url.match(regex);
+
+    if (match && match[2].length === 11) {
+      result.videoId = match[2];
+    }
+
+    const regPlaylist = /[?&]list=([^#\&\?]+)/;
+    match = url.match(regPlaylist);
+
+    if (match && match[1]) {
+      result.listId = match[1];
+    }
+
+    return result;
+  };
+
+  UKU.getYoutubeThumbnailURL = (videoId) => {
+    return 'https://img.youtube.com/vi/' + videoId + '/2.jpg';
+  };
 };
 
 const injectVideoJs = () => {

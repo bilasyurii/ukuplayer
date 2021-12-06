@@ -571,6 +571,8 @@ $(document).ready(() => {
       if (data.status === true) {
         const songId = data.songId;
         window.location.href = '/song?id=' + songId;
+      } else {
+        console.error(data.error);
       }
     })
     .fail((a, b, c) => {
