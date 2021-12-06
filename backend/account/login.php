@@ -21,6 +21,9 @@ if (mysqli_num_rows($usersFound) > 0) {
     'name' => $name,
   ];
 
+  setcookie('userId', $id);
+  setcookie('userName', $name);
+
   echo json_encode([
     'status' => true,
     'id' => $id,

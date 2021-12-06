@@ -11,8 +11,6 @@ $(document).ready(() => {
   <div class="flex-grow-1 align-self-stretch">
     <div class="d-flex w-100 justify-content-between">
       <h5 class="mb-1 song-title"></h5>
-
-      <small class="text-muted author"></small>
     </div>
 
     <small class="text-muted song-artist"></small>
@@ -29,16 +27,37 @@ $(document).ready(() => {
     song.find('.song-artist').html(songData.artist);
     song.find('.author').html(songData.userName);
     song.attr('href', '/song?id=' + songData.id);
-    $('.library-list').append(song);
+    $('.songs-list').append(song);
   };
 
   const addPlaceholder = () => {
     const placeholder = $('<h5 class="text-center">No songs found</h5>');
-    $('.library-list').append(placeholder);
+    $('.songs-list').append(placeholder);
   };
 
+  const setUserName = (name) => {
+    $('.user-name').html(name);
+  };
+
+  $('#logoutBtn').click(() => {
+    $.post({
+      url: '/backend/account/logout.php',
+      dataType: 'json',
+    })
+    .done((data) => {
+      if (data.status === true) {
+        window.location.href = '/';
+      } else {
+        console.error(data.error);
+      }
+    })
+    .fail((a, b, c) => {
+      console.error(a, b, c);
+    });
+  });
+
   $.post({
-    url: '/backend/library/get.php',
+    url: '/backend/account/profile.php',
     dataType: 'json',
   })
   .done((data) => {
@@ -50,6 +69,8 @@ $(document).ready(() => {
       } else {
         addSongs(data.songs);
       }
+
+      setUserName(data.userName);
     } else {
       console.error(data.error);
     }

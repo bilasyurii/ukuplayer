@@ -1,0 +1,22 @@
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.songs-list {
+  width: 600px;
+  max-width: 80%;
+}
+
+.song-thumbnail {
+  max-width: 80%;
+}
