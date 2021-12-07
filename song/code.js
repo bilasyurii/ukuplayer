@@ -350,6 +350,10 @@ $(document).ready(() => {
       'back :amount markers': backwardMarkers,
       'first (marker)': firstMarker,
       'last (marker)': lastMarker,
+      // sound
+      'sound on': soundOn,
+      'sound off': soundOff,
+      'volume :value': setVolume,
     };
 
     annyang.addCommands(commands);
@@ -444,5 +448,17 @@ $(document).ready(() => {
 
   const lastMarker = () => {
     viewMarker(markers[markers.length - 1]);
+  };
+
+  const soundOn = () => {
+    player.muted(false);
+  };
+
+  const soundOff = () => {
+    player.muted(true);
+  };
+
+  const setVolume = (value) => {
+    player.volume(UKU.int(value) / 100);
   };
 });

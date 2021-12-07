@@ -418,7 +418,6 @@ const injectNumbered = (cb) => {
 
 const setupSpeechUtils = (cb) => {
   UKU.int = (value) => {
-    console.error(value);
     if ((typeof value) === 'number') {
       return value;
     } else if (isNaN(value) === false) {
