@@ -266,12 +266,10 @@ $(document).ready(() => {
   };
 
   const pickChordGroup = (time) => {
-    const count = chordGroups.length;
-
-    for (let i = 0; i < count; ++i) {
+    for (let i = chordGroups.length - 1; i >= 0; --i) {
       const group = chordGroups[i];
 
-      if (group.getTime() >= time) {
+      if (group.getTime() <= time) {
         return group;
       }
     }
@@ -352,6 +350,7 @@ $(document).ready(() => {
       'last (marker)': lastMarker,
       'restart marker': restartMarker,
       'again': restartMarker,
+      'update (marker)': updateMarker,
       // sound
       'sound on': soundOn,
       'sound off': soundOff,
@@ -456,6 +455,32 @@ $(document).ready(() => {
     if (selectedMarker) {
       goToMarker(selectedMarker);
     }
+  };
+
+  const updateMarker = () => {
+    if (!player) {
+      return;
+    }
+
+    const marker = pickMarker(player.currentTime());
+
+    if (!marker) {
+      return;
+    }
+
+    viewMarker(marker);
+  };
+
+  const pickMarker = (time) => {
+    for (let i = markers.length - 1; i >= 0; --i) {
+      const marker = markers[i];
+
+      if (marker.getTime() <= time) {
+        return marker;
+      }
+    }
+
+    return null;
   };
 
   const soundOn = () => {
