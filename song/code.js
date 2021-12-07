@@ -350,6 +350,8 @@ $(document).ready(() => {
       'back :amount markers': backwardMarkers,
       'first (marker)': firstMarker,
       'last (marker)': lastMarker,
+      'restart marker': restartMarker,
+      'again': restartMarker,
       // sound
       'sound on': soundOn,
       'sound off': soundOff,
@@ -357,7 +359,7 @@ $(document).ready(() => {
     };
 
     annyang.addCommands(commands);
-    annyang.addCallback('result', (a) => console.log(a));
+    // annyang.addCallback('result', (a) => console.log(a));
     annyang.start();
   });
 
@@ -448,6 +450,12 @@ $(document).ready(() => {
 
   const lastMarker = () => {
     viewMarker(markers[markers.length - 1]);
+  };
+
+  const restartMarker = () => {
+    if (selectedMarker) {
+      goToMarker(selectedMarker);
+    }
   };
 
   const soundOn = () => {
