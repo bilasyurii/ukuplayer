@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="/main.js"></script>
 </head>
-<body>
+<body class='home-page'>
   <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
       <a class="navbar-brand" href="/">UkuPlayer</a>
@@ -24,5 +24,46 @@
       </div>
     </div>
   </nav>
+
+  <div class="home-cards-wrapper">
+    <div class="row my-5 home-cards-container">
+      <div class="col-sm-6 py-3">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Create song</h5>
+            <p class="card-text">Use a wizard tool to create a new song, add markers, chords etc.</p>
+            <a href="/create" class="btn btn-primary">Start</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 py-3">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Library</h5>
+            <p class="card-text">Take a look at library of available songs, created by you and other users.</p>
+            <a href="/library" class="btn btn-primary">View</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 py-3">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Tuner</h5>
+            <p class="card-text">Try a useful tool to tune your instrument.</p>
+            <a href="/tuner" class="btn btn-primary">Tune</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 py-3">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Profile</h5>
+            <p class="card-text">Go to your account's profile page to manage it or to see your songs.</p>
+            <a href="/account/profile" class="btn btn-primary">Check</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

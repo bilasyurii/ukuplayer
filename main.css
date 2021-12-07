@@ -9,3 +9,41 @@ body {
 .video-js .vjs-remaining-time {
   display: none;
 }
+
+body.home-page {
+  display: flex;
+  flex-direction: column;
+}
+
+.home-cards-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.home-cards-container {
+  background-color: #e7e9eb;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 600px;
+  max-width: 80%;
+}
+
+.home-cards-container .card {
+  height: 100%;
+}
+
+.home-cards-container .card-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.home-cards-container .card-title {
+  text-align: center;
+}
+
+.home-cards-container .btn {
+  margin-top: auto;
+}
