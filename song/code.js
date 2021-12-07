@@ -195,6 +195,10 @@ $(document).ready(() => {
   };
 
   const onMarkerClicked = (marker) => {
+    viewMarker(marker);
+  };
+
+  const viewMarker = (marker) => {
     const isActive = marker.button.hasClass('active');
 
     if (isActive) {
@@ -340,6 +344,12 @@ $(document).ready(() => {
       'back minutes :amount': backwardMinutes,
       // markers
       '(go to) marker *name': goToMarkerByName,
+      'next (marker)': nextMarker,
+      'previous (marker)': previousMarker,
+      'skip :amount markers': forwardMarkers,
+      'back :amount markers': backwardMarkers,
+      'first (marker)': firstMarker,
+      'last (marker)': lastMarker,
     };
 
     annyang.addCommands(commands);
@@ -398,6 +408,41 @@ $(document).ready(() => {
     const marker = markers.find((marker) => {
       return marker.getText() === match;
     });
-    goToMarker(marker);
+    viewMarker(marker);
+  };
+
+  const seekMarker = (amount) => {
+    const index = markers.indexOf(selectedMarker);
+    const newIndex = index + amount;
+
+    if (newIndex < 0 || newIndex >= markers.length) {
+      return;
+    }
+
+    viewMarker(markers[newIndex]);
+  }
+
+  const nextMarker = () => {
+    seekMarker(1);
+  };
+
+  const previousMarker = () => {
+    seekMarker(-1);
+  };
+
+  const forwardMarkers = (amount) => {
+    seekMarker(UKU.int(amount));
+  };
+
+  const backwardMarkers = (amount) => {
+    seekMarker(-UKU.int(amount));
+  };
+
+  const firstMarker = () => {
+    viewMarker(markers[0]);
+  };
+
+  const lastMarker = () => {
+    viewMarker(markers[markers.length - 1]);
   };
 });
