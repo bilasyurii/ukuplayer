@@ -45,10 +45,12 @@ $(document).ready(() => {
     player.one('play', () => {
       addMarkersToPlayer(markers);
       sortMarkers();
+      sortChordGroups();
     });
 
     player.ready(() => {
       setupPlayerSrc();
+      player.on('timeupdate', onTimeUpdate);
     });
   });
 
@@ -178,6 +180,10 @@ $(document).ready(() => {
     list.append(buttons);
   };
 
+  const sortChordGroups = () => {
+    chordGroups.sort(compareMarkers);
+  };
+
   const compareMarkers = (a, b) => {
     return a.getTime() - b.getTime();
   };
@@ -224,7 +230,75 @@ $(document).ready(() => {
   };
 
   const goToMarker = (marker) => {
+    if (!player) {
+      return;
+    }
+
     player.currentTime(marker.getTime());
+  };
+
+  const onTimeUpdate = () => {
+    const group = pickChordGroup(player.currentTime());
+
+    if (group === selectedChordGroup) {
+      return;
+    }
+
+    selectedChordGroup = group;
+    removeChordsFromUI();
+
+    if (group) {
+      addChordsFromGroup(group);
+      setChordGroupTitle(group.getText());
+    } else {
+      setChordGroupTitle('');
+    }
+  };
+
+  const setChordGroupTitle = (title) => {
+    $('#chord-group-title').html(title);
+  };
+
+  const pickChordGroup = (time) => {
+    const count = chordGroups.length;
+
+    for (let i = 0; i < count; ++i) {
+      const group = chordGroups[i];
+
+      if (group.getTime() >= time) {
+        return group;
+      }
+    }
+
+    return null;
+  };
+
+  const removeChordsFromUI = () => {
+    $('#chordsList').empty();
+  };
+
+  const addChordsFromGroup = (chordGroup) => {
+    chordGroup.chords.forEach((chord) => addChordToUI(chord));
+  };
+
+  const addChordToUI = (chord) => {
+    const card = $(`
+<div class="card m-2">
+  <h5 class="card-title text-center m-3">C#</h5>
+</div>
+`);
+    const cardNative = card[0];
+    $('#chordsList').append(card);
+
+    chord.card = card;
+    chord.cardNative = cardNative;
+    cardNative.chord = chord;
+
+    updateChordUI(chord);
+  };
+
+  const updateChordUI = (chord) => {
+    chord.card.find('.card-title').html(chord.name);
   };
 
   fetchSongData();
