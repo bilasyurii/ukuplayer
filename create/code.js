@@ -60,25 +60,25 @@ $(document).ready(() => {
     });
 
     if (DEBUG) {
-      const kekMarker = createMarker(20, 'Kek');
-      markers.push(kekMarker);
-      addMarkerToUI(kekMarker);
+      const test1Marker = createMarker(20, 'test1');
+      markers.push(test1Marker);
+      addMarkerToUI(test1Marker);
 
-      const cheburekMarker = createMarker(100, 'Cheburek');
-      markers.push(cheburekMarker);
-      addMarkerToUI(cheburekMarker);
+      const test2Marker = createMarker(100, 'test2');
+      markers.push(test2Marker);
+      addMarkerToUI(test2Marker);
 
       sortMarkers();
 
-      const kekGroup = createChordGroup(30, 'kek');
-      chordGroups.push(kekGroup);
-      addChordGroupToUI(kekGroup);
+      const test2Group = createChordGroup(30, 'test2');
+      chordGroups.push(test2Group);
+      addChordGroupToUI(test2Group);
       sortChordGroups();
-      addChordGroupToPlayer(kekGroup);
+      addChordGroupToPlayer(test2Group);
 
       const chord = new Chord();
       chord.name = 'C#';
-      selectedChordGroup = kekGroup;
+      selectedChordGroup = test2Group;
       createChord(chord);
       removeChordsFromUI();
     }

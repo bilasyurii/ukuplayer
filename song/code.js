@@ -302,4 +302,91 @@ $(document).ready(() => {
   };
 
   fetchSongData();
+
+  UKU.injectSpeechRecognition().then(() => {
+    if (!annyang) {
+      return;
+    }
+
+    const commands = {
+      // playing controls
+      'play': play,
+      'resume': play,
+      'pause': pause,
+      'stop': pause,
+      'restart': restart,
+      'go to start': restart,
+      // seconds forward
+      'forward :amount (second)': forwardSeconds,
+      'forward :amount (seconds)': forwardSeconds,
+      'skip :amount (second)': forwardSeconds,
+      'skip :amount (seconds)': forwardSeconds,
+      // seconds backward
+      'backward :amount (second)': backwardSeconds,
+      'backward :amount (seconds)': backwardSeconds,
+      'back :amount (second)': backwardSeconds,
+      'back :amount (seconds)': backwardSeconds,
+      // minutes forward
+      'forward minute :amount': forwardMinutes,
+      'forward minutes :amount': forwardMinutes,
+      'skip minute :amount': forwardMinutes,
+      'skip minutes :amount': forwardMinutes,
+      // minutes backward
+      'backward minute :amount': backwardMinutes,
+      'backward minutes :amount': backwardMinutes,
+      'back minute :amount': backwardMinutes,
+      'back minutes :amount': backwardMinutes,
+    };
+
+    annyang.addCommands(commands);
+    annyang.addCallback('result', (a, b, c) => console.log(a, b, c));
+    annyang.start();
+  });
+
+  const play = () => {
+    if (player) {
+      player.play();
+    }
+  };
+
+  const pause = () => {
+    if (player) {
+      player.pause();
+    }
+  };
+
+  const restart = () => {
+    if (player) {
+      player.currentTime(0);
+    }
+  };
+
+  const seek = (amount) => {
+    console.warn(amount);
+    if (player) {
+      let time = player.currentTime() + amount;
+
+      if (time < 0) {
+        time = 0;
+      }
+
+      player.currentTime(time);
+    }
+  };
+
+  const forwardSeconds = (amount) => {
+    seek(UKU.int(amount));
+  };
+
+  const backwardSeconds = (amount) => {
+    seek(-UKU.int(amount));
+  };
+
+  const forwardMinutes = (amount) => {
+    seek(UKU.int(amount) * 60);
+  };
+
+  const backwardMinutes = (amount) => {
+    seek(UKU.int(amount) * -60);
+  };
 });

@@ -369,6 +369,70 @@ const injectChordPicker = () => {
 
 UKU.injectChordPicker = injectChordPicker;
 
+const injectSpeechRecognition = () => {
+  return new Promise((resolve) => {const steps = [];
+
+    const addStep = (step) => {
+      steps.push(step);
+    };
+
+    addStep(injectAnnyang);
+    addStep(injectNumbered);
+    addStep(setupSpeechUtils);
+
+    let progress = 0;
+    const count = steps.length;
+    const resolveStep = () => {
+      ++progress;
+      if (progress === count) {
+        resolve();
+      }
+    };
+
+    for (let i = 0; i < count; ++i) {
+      steps[i](resolveStep);
+    }
+  });
+};
+
+const injectAnnyang = (cb) => {
+  const script = document.createElement('script');
+  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/annyang/2.6.0/annyang.min.js';
+  script.crossOrigin = 'anonymous';
+  script.referrerPolicy = 'no-referrer';
+  script.async = false;
+  script.onload = cb;
+  document.head.appendChild(script);
+};
+
+const injectNumbered = (cb) => {
+  const script = document.createElement('script');
+  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/numbered/1.1.0/index.min.js';
+  script.integrity = 'sha512-UQKbSOyUPIxk4a5/TIcqKUfl2JX0b1Rgq16BgvZbIWa7g5g3Rl/RXzFJFt2iu9LzDUpqDbcaak2ifjW887SxPw==';
+  script.crossOrigin = 'anonymous';
+  script.referrerPolicy = 'no-referrer';
+  script.async = false;
+  script.onload = cb;
+  document.head.appendChild(script);
+};
+
+const setupSpeechUtils = (cb) => {
+  UKU.int = (value) => {
+    console.error(value);
+    if ((typeof value) === 'number') {
+      return value;
+    } else if (isNaN(value) === false) {
+      return parseInt(value);
+    } else {
+      return numbered.parse(value);
+    }
+  };
+
+  cb();
+};
+
+UKU.injectSpeechRecognition = injectSpeechRecognition;
+
 boot();
 
 })();
