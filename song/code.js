@@ -4,6 +4,7 @@ let player;
 let srcSetup = false;
 
 const markers = [];
+const markersNames = [];
 const chordGroups = [];
 
 let selectedMarker = null;
@@ -73,6 +74,7 @@ $(document).ready(() => {
       marker.data = data;
       data.marker = marker;
       markers.push(marker);
+      markersNames.push(data.text);
     });
 
     chordGroupsData.forEach((chordGroupData) => {
@@ -336,10 +338,12 @@ $(document).ready(() => {
       'backward minutes :amount': backwardMinutes,
       'back minute :amount': backwardMinutes,
       'back minutes :amount': backwardMinutes,
+      // markers
+      '(go to) marker *name': goToMarkerByName,
     };
 
     annyang.addCommands(commands);
-    annyang.addCallback('result', (a, b, c) => console.log(a, b, c));
+    annyang.addCallback('result', (a) => console.log(a));
     annyang.start();
   });
 
@@ -362,7 +366,6 @@ $(document).ready(() => {
   };
 
   const seek = (amount) => {
-    console.warn(amount);
     if (player) {
       let time = player.currentTime() + amount;
 
@@ -388,5 +391,13 @@ $(document).ready(() => {
 
   const backwardMinutes = (amount) => {
     seek(UKU.int(amount) * -60);
+  };
+
+  const goToMarkerByName = (name) => {
+    const match = UKU.closestMatch(name.toLowerCase(), markersNames);
+    const marker = markers.find((marker) => {
+      return marker.getText() === match;
+    });
+    goToMarker(marker);
   };
 });
