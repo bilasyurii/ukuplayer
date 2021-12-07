@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="/main.js"></script>
+</head>
+<body>
+  <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">UkuPlayer</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav w-100">
+          <a class="nav-link" aria-current="page" href="/">Home</a>
+          <a class="nav-link active" href="/create">Create song</a>
+          <a class="nav-link" href="/library">Library</a>
+          <a class="nav-link me-auto" href="/tuner">Tuner</a>
+          <a class="nav-link" href="/account/profile">Profile</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="create-song-wrapper">
+    <div class="song-container my-5">
+      <video controls class="video-js vjs-theme-city vjs-fluid vjs-hidden" id="ukuVideo"></video>
+
+      <div class="list-group" id="chordGroupsList"></div>
+
+      <div class="list-group mt-3" id="markersList"></div>
+    </div>
+  </div>
+</body>
+</html>

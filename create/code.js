@@ -142,7 +142,7 @@ $(document).ready(() => {
       case MARKERS:
         onMarkerMarkerClicked(marker);
         break;
-      case MARKERS:
+      case CHORDS:
         onChordMarkerClicked(marker);
         break;
     }
