@@ -3,18 +3,15 @@ body {
   flex-direction: column;
 }
 
-.tuner-wrapper {
+.about-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-grow: 1;
 }
 
-.tuner-container {
-  background-color: #e7e9eb;
+.about-container {
   padding: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
   width: 600px;
   max-width: 80%;
   display: flex;
