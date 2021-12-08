@@ -370,7 +370,8 @@ const injectChordPicker = () => {
 UKU.injectChordPicker = injectChordPicker;
 
 const injectSpeechRecognition = () => {
-  return new Promise((resolve) => {const steps = [];
+  return new Promise((resolve) => {
+    const steps = [];
 
     const addStep = (step) => {
       steps.push(step);
@@ -487,6 +488,54 @@ const setupSpeechUtils = (cb) => {
 };
 
 UKU.injectSpeechRecognition = injectSpeechRecognition;
+
+const injectTuner = () => {
+  return new Promise((resolve) => {
+    const steps = [];
+
+    const addStep = (step) => {
+      steps.push(step);
+    };
+
+    addStep(injectAubio);
+    addStep(injectTunerScript);
+
+    let progress = 0;
+    const count = steps.length;
+    const resolveStep = () => {
+      ++progress;
+      if (progress === count) {
+        resolve();
+      }
+    };
+
+    for (let i = 0; i < count; ++i) {
+      steps[i](resolveStep);
+    }
+  });
+};
+
+const injectAubio = (cb) => {
+  const script = document.createElement('script');
+  script.src = 'https://cdn.jsdelivr.net/npm/aubiojs';
+  script.crossOrigin = 'anonymous';
+  script.referrerPolicy = 'no-referrer';
+  script.async = false;
+  script.onload = cb;
+  document.head.appendChild(script);
+};
+
+const injectTunerScript = (cb) => {
+  const script = document.createElement('script');
+  script.src = '/logic/tuner.js';
+  script.crossOrigin = 'anonymous';
+  script.referrerPolicy = 'no-referrer';
+  script.async = false;
+  script.onload = cb;
+  document.head.appendChild(script);
+};
+
+UKU.injectTuner = injectTuner;
 
 boot();
 
