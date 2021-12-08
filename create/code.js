@@ -572,11 +572,11 @@ $(document).ready(() => {
         const songId = data.songId;
         window.location.href = '/song?id=' + songId;
       } else {
-        console.error(data.error);
+        UKU.handleError(data);
       }
     })
-    .fail((a, b, c) => {
-      console.error(a, b, c);
+    .fail((data) => {
+      UKU.handleError(data);
     });
   });
 

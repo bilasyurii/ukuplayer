@@ -144,6 +144,7 @@ const injectScripts = () => {
 const setupUtils = () => {
   setupJqueryUtils();
   setupYoutubeUtils();
+  setupBrowserUtils();
 };
 
 const injectBootstrap = () => {
@@ -242,6 +243,36 @@ const setupYoutubeUtils = () => {
 
   UKU.getYoutubeThumbnailURL = (videoId) => {
     return 'https://img.youtube.com/vi/' + videoId + '/2.jpg';
+  };
+};
+
+const setupBrowserUtils = () => {
+  UKU.goToURL = (url) => {
+    window.location.href = url;
+  };
+
+  UKU.goToLogin = () => {
+    UKU.goToURL('/account/login');
+  };
+
+  UKU.goToRegister = () => {
+    UKU.goToURL('/account/register');
+  };
+
+  UKU.handleError = (data) => {
+    if ((typeof data) === 'object') {
+      console.error(data.error);
+
+      if (data.error === 'Not authorized') {
+        UKU.goToLogin();
+      }
+    } else {
+      console.error(data);
+
+      if (data === 'Not authorized') {
+        UKU.goToLogin();
+      }
+    }
   };
 };
 

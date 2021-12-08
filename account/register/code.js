@@ -17,11 +17,15 @@ $(document).ready(() => {
       if (data.status === true) {
         window.location.href = '/account/login';
       } else {
-        console.error(data.error);
+        UKU.handleError(data);
       }
     })
-    .fail((a, b, c) => {
-      console.error(a, b, c);
+    .fail((data) => {
+      UKU.handleError(data);
     });
+  });
+
+  $('#loginBtn').click(() => {
+    UKU.goToLogin();
   });
 });
